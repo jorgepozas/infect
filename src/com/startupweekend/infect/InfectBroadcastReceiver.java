@@ -1,11 +1,15 @@
 package com.startupweekend.infect;
 
+import java.util.List;
+
 import com.littlefluffytoys.littlefluffylocationlibrary.LocationInfo;
 import com.littlefluffytoys.littlefluffylocationlibrary.LocationLibraryConstants;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseException;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +22,7 @@ public class InfectBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d("LocationBroadcastReceiver", "onReceive: received location update");
 
+        final Context theContext = context;
         final LocationInfo locationInfo = (LocationInfo) intent.getSerializableExtra(
                 LocationLibraryConstants.LOCATION_BROADCAST_EXTRA_LOCATIONINFO);
         
@@ -27,15 +32,33 @@ public class InfectBroadcastReceiver extends BroadcastReceiver {
         String currentUserId = SharedPrefUtils.getUserId(context);
         
         if(currentUserId != null && !currentUserId.isEmpty()){
-        
+             
              query.getInBackground(currentUserId, new GetCallback<ParseObject>() {
-               public void done(ParseObject gameScore, ParseException e) {
+               public void done(ParseObject userObject, ParseException e) {
                  if (e == null) {
-    
-                   gameScore.put("lastLatitude", locationInfo.lastLat);
-                   gameScore.put("lastLognitude", locationInfo.lastLong);
-                   gameScore.saveInBackground();
+                   float currentLatitude = SharedPrefUtils.getLatitude(theContext);
+                   float currentLongitude = SharedPrefUtils.getLongitude(theContext);
+                   
+                   if(currentLatitude != locationInfo.lastLat || currentLongitude != locationInfo.lastLong){
+                       // Update in server
+                       userObject.put("lastLatitude", locationInfo.lastLat);
+                       userObject.put("lastLongitude", locationInfo.lastLong);
+                       userObject.saveInBackground();
+                       
+                       SharedPrefUtils.setLatitude(theContext, locationInfo.lastLat);
+                       SharedPrefUtils.setLongitude(theContext, locationInfo.lastLong);
+                   }
+                   
                    Log.d("LocationBroadcastReceiver", "UPDATED LOCATION ON SERVER");
+                   
+                   // TODO: Move this code into if statement above, outside for DEMO
+                   // Query for intersection with other users
+
+                   boolean inBattle = userObject.getBoolean("inBattle");
+                   
+                   if(!inBattle){
+                       EncounterHelper.queryForEncounter(locationInfo.lastLat, locationInfo.lastLong, theContext);
+                   }
                  }
                }
              });

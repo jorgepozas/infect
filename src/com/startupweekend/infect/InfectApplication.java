@@ -48,6 +48,7 @@ public class InfectApplication extends Application {
                    if(e==null){
                        // Retrieve new userId and store it locally
                        SharedPrefUtils.setUserId(getApplicationContext(), newUser.getObjectId());
+                       SharedPrefUtils.setUserState(getApplicationContext(), 0);
                    }
 
                 }

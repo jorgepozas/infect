@@ -87,4 +87,44 @@ public class SharedPrefUtils {
 		setSharedPreStringData(context, "userId",
 		        userId);
 	}
+	
+    public static int getUserState(Context context) {
+        return getSharedPrefIntData(context,
+                "userState");
+    }
+
+    public static void setUserState(Context context, int userState) {
+        setSharedPrefIntData(context, "userState",
+                userState);
+    }
+	
+	public static float getLatitude(Context context) {
+	    String latitude = getSharedPrefStringData(context,"latitude");
+	    if(latitude != null && !latitude.isEmpty()){
+	        return Float.parseFloat(latitude);
+	    }
+	    else {
+	        return 0;
+	    }
+    }
+
+    public static void setLatitude(Context context, float latitude) {
+        setSharedPreStringData(context, "latitude",
+                Float.toString(latitude));
+    }
+    
+    public static float getLongitude(Context context) {        
+        String longitude = getSharedPrefStringData(context,"longitude");
+        if(longitude != null && !longitude.isEmpty()){
+            return Float.parseFloat(longitude);
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public static void setLongitude(Context context, float longitude) {
+        setSharedPreStringData(context, "longitude",
+                Float.toString(longitude));
+    }
 }
