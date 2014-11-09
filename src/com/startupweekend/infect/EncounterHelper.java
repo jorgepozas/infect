@@ -38,7 +38,7 @@ public class EncounterHelper {
                     
                     if(userList.size() > 0){
                         ParseObject user = userList.get(0);
-                        setupFight(user, theContext);
+                        //setupFight(user, theContext);
                     }
                 } else {
                     Log.d("score", "Error: " + e.getMessage());

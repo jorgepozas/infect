@@ -1,7 +1,5 @@
 package com.startupweekend.infect;
 
-import java.util.Random;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,40 +9,23 @@ import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 
-public class BattleModeActivity extends Activity {
+public class BattleResultActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_battlemode);
+        setContentView(R.layout.activity_battleresult);
         
         OnClickListener onClickListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseWinner();
-                
-                Intent i = new Intent(v.getContext(), BattleResultActivity.class);
+                Intent i = new Intent(v.getContext(), HomeActivity.class);
                 startActivity(i); 
             }
         };
         
         findViewById(R.id.battleModeContainer).setOnClickListener(onClickListener);
-    }
-    
-    private void chooseWinner(){
-        Random rn = new Random();        
-        int result = rn.nextInt(10);
-        
-        if(result <= 6){
-            // Win
-            
-        } else {
-            // Loose
-            
-        }
-        
-        
     }
 
     @Override

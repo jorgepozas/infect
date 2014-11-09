@@ -1,10 +1,7 @@
 package com.startupweekend.infect;
 
-import java.util.List;
-
 import com.littlefluffytoys.littlefluffylocationlibrary.LocationInfo;
 import com.littlefluffytoys.littlefluffylocationlibrary.LocationLibraryConstants;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -50,15 +47,6 @@ public class InfectBroadcastReceiver extends BroadcastReceiver {
                    }
                    
                    Log.d("LocationBroadcastReceiver", "UPDATED LOCATION ON SERVER");
-                   
-                   // TODO: Move this code into if statement above, outside for DEMO
-                   // Query for intersection with other users
-
-                   boolean inBattle = userObject.getBoolean("inBattle");
-                   
-                   if(!inBattle){
-                       EncounterHelper.queryForEncounter(locationInfo.lastLat, locationInfo.lastLong, theContext);
-                   }
                  }
                }
              });
