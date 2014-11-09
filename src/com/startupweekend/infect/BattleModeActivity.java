@@ -5,13 +5,17 @@ import java.util.Random;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
 
 public class BattleModeActivity extends Activity {
+    
+    private RelativeLayout relativeLayoutContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,32 +23,49 @@ public class BattleModeActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_battlemode);
         
+        relativeLayoutContainer = (RelativeLayout) findViewById(R.id.battleModeContainer);
+        
+        int userState = SharedPrefUtils.getUserState(BattleModeActivity.this);
+        
+        int backgroundImage;
+        
+        if(userState == 0){
+            backgroundImage = R.drawable.human_attack;
+        } else {
+            backgroundImage = R.drawable.zombie_attack;
+        }
+        
+        // Set background photo  
+        relativeLayoutContainer.setBackgroundResource(backgroundImage);
+        
+        
         OnClickListener onClickListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                chooseWinner();
+                boolean isWinner = didUserWin();
                 
                 Intent i = new Intent(v.getContext(), BattleResultActivity.class);
+                i.putExtra("isWinner", isWinner);
                 startActivity(i); 
             }
         };
         
-        findViewById(R.id.battleModeContainer).setOnClickListener(onClickListener);
+        relativeLayoutContainer.setOnClickListener(onClickListener);
     }
     
-    private void chooseWinner(){
+    private boolean didUserWin(){
         Random rn = new Random();        
-        int result = rn.nextInt(10);
+        int result = rn.nextInt(10) + 1;
+        
+        Log.d("Battle Result", result +"");
         
         if(result <= 6){
             // Win
-            
+            return true;
         } else {
             // Loose
-            
+            return false;
         }
-        
-        
     }
 
     @Override

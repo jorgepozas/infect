@@ -7,8 +7,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.RelativeLayout;
 
 public class HomeActivity extends Activity {
+    
+    private RelativeLayout relativeLayoutContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +19,22 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_home);
+        
+        relativeLayoutContainer = (RelativeLayout) findViewById(R.id.homeContainer);
+        
+        int userState = SharedPrefUtils.getUserState(HomeActivity.this);
+        
+        int backgroundImage;
+        
+        if(userState == 0){
+            backgroundImage = R.drawable.human_home;
+        } else {
+            backgroundImage = R.drawable.zombie_home;
+        }
+        
+        // Set background photo  
+        relativeLayoutContainer.setBackgroundResource(backgroundImage);
+        
         
         OnClickListener onClickListener = new OnClickListener() {
             @Override
